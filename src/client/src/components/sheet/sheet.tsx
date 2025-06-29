@@ -1,10 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { SheetClose, Sheet as SheetComponent, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+	SheetClose,
+	Sheet as SheetComponent,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@/components/ui/sheet';
 import { getLanguagesSync } from '@/lib/language-store';
 import { TranslationSchema, type Language } from '@/types/table-types';
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 
 interface SheetProps {
@@ -16,7 +25,7 @@ export function Sheet({ onAddRow }: SheetProps) {
 	const [translations, setTranslations] = useState<Record<string, string>>({});
 	const [error, setError] = useState<string | null>(null);
 	const [nextId, setNextId] = useState(1);
-	const [langs, setlangs] = useState<Language[]>(getLanguagesSync())
+	const [langs, setlangs] = useState<Language[]>(getLanguagesSync());
 
 	const handleChange = (lang: string, value: string) => {
 		setTranslations(prev => ({ ...prev, [lang]: value }));
@@ -24,7 +33,9 @@ export function Sheet({ onAddRow }: SheetProps) {
 
 	const handleSave = () => {
 		// хотя бы 1 перевод должен быть заполнен
-		const atLeastOne = langs.some(lang => translations[lang] && translations[lang].trim() !== '');
+		const atLeastOne = langs.some(
+			lang => translations[lang] && translations[lang].trim() !== ''
+		);
 		if (!atLeastOne) {
 			setError('Fill in at least one transfer');
 			return;
@@ -32,7 +43,9 @@ export function Sheet({ onAddRow }: SheetProps) {
 		const result = TranslationSchema.safeParse({
 			id: nextId,
 			key,
-			translations: Object.fromEntries(langs.map(l => [l, translations[l] || '']))
+			translations: Object.fromEntries(
+				langs.map(l => [l, translations[l] || ''])
+			),
 		});
 		if (!result.success) {
 			setError('Check that the fields are filled in correctly');
@@ -56,28 +69,30 @@ export function Sheet({ onAddRow }: SheetProps) {
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle className='text-xl'>Add row</SheetTitle>
-					<SheetDescription>
-						Add a new translation row.
-					</SheetDescription>
+					<SheetDescription>Add a new translation row.</SheetDescription>
 				</SheetHeader>
-				<div className="grid flex-1 auto-rows-min gap-3 px-4">
-					<div className="grid gap-3">
-						<Label htmlFor="sheet-demo-name">Key</Label>
-						<Input placeholder='Key' value={key} onChange={e => setKey(e.target.value)}/>
+				<div className='grid flex-1 auto-rows-min gap-3 px-4'>
+					<div className='grid gap-3'>
+						<Label htmlFor='sheet-demo-name'>Key</Label>
+						<Input
+							placeholder='Key'
+							value={key}
+							onChange={e => setKey(e.target.value)}
+						/>
 					</div>
-					<div className="grid gap-3">
+					<div className='grid gap-3'>
 						{langs.map(lang => (
 							<>
-							<Label htmlFor="sheet-demo-name">{lang.toUpperCase()}</Label>
-							<Input
-								key={lang}
-								placeholder={`Перевод (${lang})`}
-								value={translations[lang] || ''}
-								onChange={e => handleChange(lang, e.target.value)}
+								<Label htmlFor='sheet-demo-name'>{lang.toUpperCase()}</Label>
+								<Input
+									key={lang}
+									placeholder={`Перевод (${lang})`}
+									value={translations[lang] || ''}
+									onChange={e => handleChange(lang, e.target.value)}
 								/>
 							</>
 						))}
-						{error && <div className="text-red-500 text-sm">{error}</div>}
+						{error && <div className='text-red-500 text-sm'>{error}</div>}
 					</div>
 				</div>
 				{/* <div className="py-4 flex flex-col gap-2">
@@ -95,9 +110,11 @@ export function Sheet({ onAddRow }: SheetProps) {
 					{error && <div className="text-red-500 text-sm">{error}</div>}
 				</div> */}
 				<SheetFooter>
-					<Button type="button" onClick={handleSave}>Save changes</Button>
+					<Button type='button' onClick={handleSave}>
+						Save changes
+					</Button>
 					<SheetClose asChild>
-						<Button variant="outline">Close</Button>
+						<Button variant='outline'>Close</Button>
 					</SheetClose>
 				</SheetFooter>
 			</SheetContent>

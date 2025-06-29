@@ -47,7 +47,36 @@ function Index() {
 		});
 	};
 
-	const columns = columnsFactory(langs, handleDeleteRow);
+	const handleEditCell = (
+		id: string,
+		field: Language | 'key',
+		value: string
+	) => {
+		setData(prev =>
+			prev!.map(row =>
+				row.id.toString() === id
+					? field === 'key'
+						? { ...row, key: value }
+						: {
+								...row,
+								translations: {
+									...row.translations,
+									[field]: value,
+								},
+							}
+					: row
+			)
+		);
+
+		// Пример API-запроса
+		// fetch(`/api/translate/${id}`, {
+		// 	method: 'PATCH',
+		// 	headers: { 'Content-Type': 'application/json' },
+		// 	body: JSON.stringify({ field, value }),
+		// });
+	};
+
+	const columns = columnsFactory(langs, handleDeleteRow, handleEditCell);
 
 	return (
 		<div className='p-2'>
