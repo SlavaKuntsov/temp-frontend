@@ -42,6 +42,7 @@ export function columnsFactory(
 			),
 		},
 		...langs.map<ColumnDef<Translation>>(lang => ({
+			accessorFn: row => row.translations[lang],
 			id: lang,
 			header: ({ column }) => (
 				<DataTableColumnHeader column={column} title={languageTitles[lang]} />

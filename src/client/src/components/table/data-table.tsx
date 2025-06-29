@@ -20,9 +20,12 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
+import { getSelectedLanguagesSync } from '@/lib/language-store';
+import type { Language } from '@/types/table-types';
 import React, { useEffect, useState } from 'react';
 import { Sheet } from '../sheet/sheet';
 import { DataTablePagination } from './data-table-pagination';
+import { DropdownMenu } from './dropdown-menu';
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -39,11 +42,32 @@ export function DataTable<TData, TValue>({
 		setLocalData(data);
 	}, [data]);
 
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[]
+	);
+
+	const defaultLanguages = getSelectedLanguagesSync();
+
+	const initialVisibility = columns.reduce<Record<string, boolean>>(
+		(acc, col) => {
+			const id = col.id ?? '';
+
+			if (id === 'key' || defaultLanguages.includes(id as Language)) {
+				acc[id] = true;
+			} else {
+				acc[id] = false;
+			}
+			return acc;
+		},
+		{}
+	);
 
 	const table = useReactTable({
 		data: localData,
 		columns,
+		initialState: {
+			columnVisibility: initialVisibility,
+		},
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
@@ -69,7 +93,10 @@ export function DataTable<TData, TValue>({
 					}
 					className='max-w-sm'
 				/>
-				<Sheet onAddRow={handleAddRow} />
+				<div className='flex flex-row items-center gap-4'>
+					<DropdownMenu table={table} />
+					<Sheet onAddRow={handleAddRow} />
+				</div>
 			</div>
 			<div className='rounded-md border mb-2'>
 				<Table>
@@ -82,9 +109,9 @@ export function DataTable<TData, TValue>({
 											{header.isPlaceholder
 												? null
 												: flexRender(
-													header.column.columnDef.header,
-													header.getContext()
-												)}
+														header.column.columnDef.header,
+														header.getContext()
+													)}
 										</TableHead>
 									);
 								})}

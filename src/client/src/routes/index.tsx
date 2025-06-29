@@ -34,7 +34,7 @@ function Index() {
 			<div className='p-2'>
 				<h3 className='font-semibold text-3xl mb-4'>Translation Service!</h3>
 				<div className='flex justify-center items-center py-12'>
-					<div className='animate-spin rounded-full h-8 w-8 border-4 border-orange-400 border-t-transparent' />
+					<div className='animate-spin rounded-full h-8 w-8 border-4 border-zinc-900 border-t-transparent' />
 				</div>
 			</div>
 		);

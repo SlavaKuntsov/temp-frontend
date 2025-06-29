@@ -11,10 +11,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet';
-import { getLanguagesSync } from '@/lib/language-store';
+import { getSelectedLanguagesSync } from '@/lib/language-store';
 import { TranslationSchema, type Language } from '@/types/table-types';
 import { IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface SheetProps {
 	onAddRow: (row: any) => void;
@@ -25,14 +25,13 @@ export function Sheet({ onAddRow }: SheetProps) {
 	const [translations, setTranslations] = useState<Record<string, string>>({});
 	const [error, setError] = useState<string | null>(null);
 	const [nextId, setNextId] = useState(1);
-	const [langs, setlangs] = useState<Language[]>(getLanguagesSync());
+	const [langs, setLangs] = useState<Language[]>(getSelectedLanguagesSync())
 
 	const handleChange = (lang: string, value: string) => {
 		setTranslations(prev => ({ ...prev, [lang]: value }));
 	};
 
 	const handleSave = () => {
-		// хотя бы 1 перевод должен быть заполнен
 		const atLeastOne = langs.some(
 			lang => translations[lang] && translations[lang].trim() !== ''
 		);
@@ -58,10 +57,14 @@ export function Sheet({ onAddRow }: SheetProps) {
 		setNextId(id => id + 1);
 	};
 
+	// useEffect(() => {
+	// 	setla
+	// })
+
 	return (
 		<SheetComponent>
 			<SheetTrigger asChild>
-				<Button variant='outline' size='sm'>
+				<Button variant='outline' size='sm' onClick={() => setLangs(getSelectedLanguagesSync())}>
 					<IconPlus />
 					<span className='hidden lg:inline'>Add Key</span>
 				</Button>
