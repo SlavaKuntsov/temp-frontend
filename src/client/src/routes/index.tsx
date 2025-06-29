@@ -46,9 +46,9 @@ function Index() {
 			return prev.filter(row => row.id !== id);
 		});
 	};
-	
-	const columns = columnsFactory(langs,handleDeleteRow);
-	  
+
+	const columns = columnsFactory(langs, handleDeleteRow);
+
 	return (
 		<div className='p-2'>
 			<h3 className='font-semibold text-3xl mb-4'>Translation Service!</h3>
