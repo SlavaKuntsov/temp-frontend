@@ -52,7 +52,11 @@ export function DataTable<TData, TValue>({
 		(acc, col) => {
 			const id = col.id ?? '';
 
-			if (id === 'key' || defaultLanguages.includes(id as Language)) {
+			if (
+				id === 'key' ||
+				id === 'actions' ||
+				defaultLanguages.includes(id as Language)
+			) {
 				acc[id] = true;
 			} else {
 				acc[id] = false;

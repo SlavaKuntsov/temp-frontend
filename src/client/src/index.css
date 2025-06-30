@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --text-sm: 1.1rem; 
-	--spacing: 0.35rem;
+  --text-sm: 1.0rem; 
+	--spacing: 0.3rem;
 }
 
 :root {
